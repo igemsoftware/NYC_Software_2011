@@ -1,0 +1,12 @@
+--2011-09-01 01:22:37--  http://pfam.sanger.ac.uk/search/sequence/resultset/085c9f76-b864-411d-b2da-ddf260f3c5b6
+Resolving pfam.sanger.ac.uk... 193.62.203.105, 193.62.203.106, 2001:630:206:4::105, ...
+Connecting to pfam.sanger.ac.uk|193.62.203.105|:80... failed: Operation timed out.
+Connecting to pfam.sanger.ac.uk|193.62.203.106|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 345 [text/html]
+Saving to: `085c9f76-b864-411d-b2da-ddf260f3c5b6.48'
+
+     0K                                                       100% 18.3M=0s
+
+2011-09-01 01:22:37 (18.3 MB/s) - `085c9f76-b864-411d-b2da-ddf260f3c5b6.48' saved [345/345]
+

@@ -1,51 +1,28 @@
-####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 
 ##### *** README *** #####
 
-# TO USER: "WE" (iGEM_NYC_Software) will maintain the local database: "All_Parts_NO_BLANKS_SIMPLE_HEADERS.fna.txt"
-# TO USER: "All_Parts_NO_BLANKS_SIMPLE_HEADERS.fna.txt" will be consistently updated (i.e. newer parts will be included when added to the registry)
-# TO USER: User's query sequence must be saved as: "Test_Sequence.fna.txt"
+# Written by the NYC_Software 2011 iGEM Team. Direct comments / questions to rud2004@med.cornell.edu
 
-##### *** NOTATIONS *** #####
+# A Couple of notes to start out:
 
-#: INDICATES COMMENT
-##: INDICATES COMMENT (IN ADDITION TO USING ONLY: #)
-###: INDICATES A FUNCTIONAL LINE THAT IS PURPOSELY BEING COMMENT OUT, BUT WILL LATER BECOME UN-COMMENTED
-####: INDICATES A FUNCTIONAL LINE THAT IS PURPOSELY BEING COMMENT OUT, AND WILL REMAIN COMMENTED (DUE TO: ALTERNATIVE METHOD ALREADY PRESENTED, SIMPLY A WORK AROUND THAT IS WORTH NOTING, ETC.)
-#####: NOT USED
-######: NOT USED
-####### ####### ####### ####### ####### ####### #######: CODE-BLOCK SPACER
+# USAGE is straightforward: python Registry_BLAST.py
+# You will be prompted for any other parameters that may need to change. 
+   
+# Your query sequence must be saved as: "Query_Sequence.fa". This is to allow future versions of this program multiple queries at a time.
+# This program uses Cambridge iGEM 2010's very useful genbank portal to download genbank files - if you would like.
+# 
+
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 
 # Prompts for the user of this script should ideally be placed in the beginning of the run, such that the user can then let the script run without any further interuptions, therefore:
 
 ## Start prompts with:
-print 'TO USER: You will be prompted %n times!'
-print 'TO USER: Pressing "N" or "Enter/Return" will initiate default response'
-print 'TO USER: Else press "Y" or enter desired value "%n", when applicable'
+print '\n\nYou will be prompted a few times.\n'
+print '"Enter/Return" will initiate default response\n'
+print 
 print
 
-## Max hit displayed prompt:
-X = raw_input( "How many hits would you like displayed? (default = 10)     " )
-if str(X) == '':
-    max_target_seqs_input = r"10"
-    print 'No entry submitted. max_target_seqs = %s' % (max_target_seqs_input)
-else:
-    max_target_seqs_input = str(int(abs(int(X))))
-    print 'Your entry: %s' % (max_target_seqs_input)
-print
-
-## GenBank download prompt:
-XXX = raw_input( "Would you like to download GenBank files of top %s hits? Y/N (default = N)     " % (max_target_seqs_input) )
-if str(XXX) == '':
-    print 'No entry submitted. Download will not occur!'
-else:
-    print 'Your entry: %s' % (str(XXX))
-print
-
-raw_input('If you would like to continue this script, then press "Enter/Return"')
-print
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 
@@ -67,8 +44,18 @@ os.chdir(my_directory)
 
 # Lines below are DOS command lines for the BLAST 2.2.25+ executables:
 
-## Block of code below, will create a BLASTable database:
-db_file = r"All_Parts_NO_BLANKS_SIMPLE_HEADERS.fna.txt" # Request this file from user
+
+## Create a BLASTable database:
+database_file = raw_input("What is the name of your database fasta file? Default is all available parts as of 10-05-10. ")
+if str(database_file) == '':
+    print 'No entry submitted. Default database "All_Parts_10-05-10.fa" will be used.'
+    db_file = r"All_Parts_10-05-10.fa"
+else:
+    print "We'll use this file: " + str(database_file)
+    db_file = database_file
+
+
+
 os_system_input_1 = r'makeblastdb -in ' + db_file + r' -dbtype nucl -input_type fasta'
 print('Creating Database ... ... ...')
 ### os.system(os_system_input_1)
@@ -76,8 +63,29 @@ print('Creating Database ... ... ...')
 print('... ... ... Database Creation Completed')
 print
 
+
+
+####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
+
+
+# Get a couple BLAST Parameters 
+## Max hit displayed prompt:
+X = raw_input( "How many hits would you like displayed? (default = 10)     " )
+if str(X) == '':
+    max_target_seqs_input = r"10"
+    print 'No entry submitted. max_target_seqs = %s' % (max_target_seqs_input)
+else:
+    max_target_seqs_input = X 
+    print 'Returning ' + max_target_seqs_input + ' alignments.'
+print
+
+
+####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
+
+
 ## Block of code below, will peform BLASTn of query sequence against database
-query_sequence_file = r"Test_Sequence.fna.txt" # Request this file from user
+raw_input("OK Save your query sequence to the Query_Sequence.fa File. This is done to allow multiple queries in future versions. Press Enter When Done.\n\n")
+query_sequence_file = r"Query_Sequence.fa" 
 # max_target_seqs_input = r"10" # Request this value from user
 os_system_input_2 = r'blastn -query ' + query_sequence_file + r' -task blastn -db ' + db_file + r' -max_target_seqs ' + max_target_seqs_input + r' -out blastn_report.xml -evalue 10 -outfmt 5'
 # Note: User does not have option to name the output xml file. Output file is: r"blastn_report.xml"
@@ -129,28 +137,16 @@ print
 print 'Description:' # Descriptions members:
 print
 for description in blast_record.descriptions:
-    print( 'Title of the hit: ' + str(description.title) )                                    # Title of the hit.
-    print( 'Accession of the hit: ' + str(description.accession) )                            # Accession of the hit.
-    print( 'Number of bits: ' + str(description.score) )                                      # Number of bits.  (int)
-    ###########################################################################################################################################################################
-    print( 'Bit score: ' + str(description.bits) )                                            # Bit score. (float)
-    print( 'E value: ' + str(description.e) )                                                 # E value.  (float)
-    print( 'Number of alignments for the same subject: ' + str(description.num_alignments) )  # Number of alignments for the same subject.  (int)
-    print
-
-# for blast_record in blast_records:
-# for databasereport in blast_record.databasereports:
-
-print 'DatabaseReport:' # DatabaseReport members:
-print 
-print( 'List of database names: ' + str(blast_record.database_name) )                                     # List of database names.  (can have multiple dbs)
-print( 'Number of letters in the database: ' + str(blast_record.num_letters_in_database) )                # Number of letters in the database.  (int)
-print( 'List of number of sequences in the database: ' + str(blast_record.num_sequences_in_database) )    # List of number of sequences in the database.
-##############################################################################################################################################################################
-print( 'List of the dates the databases were posted: ' + str(blast_record.posted_date) )                  # List of the dates the databases were posted.
-print( 'A tuple of (lambda, k, h) values: ' + str(blast_record.ka_params) )                               # A tuple of (lambda, k, h) values.  (floats)
-print( 'A tuple of (lambda, k, h) values: ' + str(blast_record.ka_params_gap) )                           # A tuple of (lambda, k, h) values.  (floats)
-print
+	title_array = str(description.title).split(" ")
+	Biobrick_ID_Hit = title_array[1]
+	print( 'Hit against: ' + str(Biobrick_ID_Hit) )                              		      # Title of the hit.
+	print( 'Accession of the hit: ' + str(description.accession) )                            # Accession of the hit.
+	print( 'Number of bits: ' + str(description.score) )                                      # Number of bits.  (int)
+	###########################################################################################################################################################################
+	print( 'Bit score: ' + str(description.bits) )                                            # Bit score. (float)
+	print( 'E value: ' + str(description.e) )                                                 # E value.  (float)
+	print( 'Number of alignments for the same subject: ' + str(description.num_alignments) )  # Number of alignments for the same subject.  (int)
+	print
 
 # for blast_record in blast_records:
 # for parameter in blast_record.parameters:
@@ -171,7 +167,7 @@ blastn_report_txt_file_handle = open(r"./blastn_report.txt", 'w')
 # for blast_record in blast_records:
 # for alignment in blast_record.alignments:
 
-print 'Alignment:' # Alignment members:
+print 'Parts Hit:' # Alignment members:
 print
 for alignment in blast_record.alignments:
     print alignment.hit_def                                                                  # Hit definition. (str)
@@ -181,7 +177,7 @@ for alignment in blast_record.alignments:
     print
 #### blastn_report_txt_file_handle.close()
 
-print 'Finished print "Alignment" members'
+print 'Finished printing "Parts Hit" '
 print 'Still writing to file: "blastn_report.txt" ... ... ...'
 print
 
@@ -193,11 +189,12 @@ print
 # for alignment in blast_record.alignments:
 # for hsp in alignment.hsps:
 
+print '************ ALIGNMENTS *************'
+
 for alignment in blast_record.alignments:
     for hsp in alignment.hsps:
         if hsp.expect < E_VALUE_THRESH:
             print
-            print '****Alignment****'
             print 'sequence:', alignment.title                                               # Name.
             print 'length:', alignment.length                                                # Length.  (int)
             print 'e value:', hsp.expect                                                     # Expect value.  (float)
@@ -216,12 +213,10 @@ for alignment in blast_record.alignments:
             #######################################################################################
 blastn_report_txt_file_handle.close()            
 print
-print 'Finished print "Alignment" members'
+print 'Finished printing alignments...'
 print '... ... ... Finished writing to file: "blastn_report.txt"'
 print
 
-raw_input('If you would like to continue this script, then press "Enter/Return"')
-print
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 
@@ -253,12 +248,12 @@ print
 # Specifically, extracting BioBrick IDs of hits:
 
 import re
-xml_blast_handle = open(r".\blastn_report.xml")
+xml_blast_handle = open(r"blastn_report.xml")
 xml_blast_text = xml_blast_handle.read()
 found_BioBrick_IDs = re.findall(r"<Hit_def>(.*)</Hit_def>", xml_blast_text)
 #### for Hit_def in found_BioBrick_IDs:
 ####     print found_BioBrick_IDs
-print found_BioBrick_IDs # Below are equivalent forms to print all entries within list "found_BioBrick_IDs"
+#print found_BioBrick_IDs # Below are equivalent forms to print all entries within list "found_BioBrick_IDs"
 #### print found_BioBrick_IDs[0:]
 #### print found_BioBrick_IDs[0:len(found_BioBrick_IDs)]
 print
@@ -273,10 +268,44 @@ blast_record = blast_records.next()                         # Note: This line al
 found_BioBrick_IDs_ = []    
 for alignment in blast_record.alignments:
     found_BioBrick_IDs_.append('%s' % (alignment.hit_def))  # Create list of strings (BioBrick IDs)
+    
+    
+####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
+
+
+#Cross Reference BioBrick IDs with their information from the parts registry
+
+
+Download_genbank = raw_input("Want to cross reference these hits with info from the Parts Registry? Default is yes.")
+
+if 'n' in str(Download_genbank):
+    print '"No" submitted. Skipping cross referencing.'
+else:
+	print 'Great! This is going to take a second though... \n\n'
+	
+	count = 0
+	for x in found_BioBrick_IDs:
+		# Fetching Web Pages:
+		# Fetching standard Web pages over HTTP is very easy with Python:
+		import urllib
+		url_2_dl = "http://cambridgeigem.org/gbdownload/" + x + ".gb"
+		#print "Retrieving " + url_2_dl
+		URL = urllib.urlopen(url_2_dl).readlines()
+		header = URL[0:2]
+		header_for_printing = "".join(header)
+		if count == 0:
+			print "These parts are aligning to your query: \n\n"
+		count = count + 1
+		print header_for_printing
+print
+
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
 
 # Providing url links to download GenBank files of hit BioBrick IDs
+raw_input('Moving on to display locations to GenBank files for these hits. Please press "Enter"')
+print
+
 
 print 'GenBank versions of top hitting BioBricks can be downloaded at the following urls:'
 print
@@ -286,11 +315,12 @@ while index < len(found_BioBrick_IDs):
 ####  print found_BioBrick_IDs[index]
     BioBrick_ID = found_BioBrick_IDs[index]
     file = BioBrick_ID + r".gb"
-    print r"http://cambridgeigem.org/gbdownload/%s" % file
+    print str(index) + r") http://cambridgeigem.org/gbdownload/%s" % file
     index += 1
 print
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
+
 
 # Ask if user would like to download GenBank files:
 # The three websites of interest are:
@@ -303,42 +333,27 @@ print
 #  XXX = raw_input( "Would you like to download these files right now? Y/N (default = N)     " )
 ####  print str(XXX)
 
-if str(XXX) == '':
+Download_genbank = raw_input("Do you want to view the full GenBank files for any of these? Enter the number - otherwise just press enter. ")
+
+if str(Download_genbank) == '':
     print 'No entry submitted. Download will not occur.'
-elif str(XXX) == 'N':
-    print 'Download will not occur due to a response: N'
-elif str(XXX) == 'Y':
-    print 'Downloading of GenBank files will commence due to a response: Y'
-    print '... ... ... Please wait ... ... ...'
-# Fetching Web Pages:
-# Fetching standard Web pages over HTTP is very easy with Python:
-    import urllib
-    index = 0
-    while index < len(found_BioBrick_IDs):
-        # print found_BioBrick_IDs[index]
-        BioBrick_ID = found_BioBrick_IDs[index]
-        file = BioBrick_ID + r".gb"
-        # print r"http://cambridgeigem.org/gbdownload/%s" % file
-        urllib.urlretrieve(r"http://cambridgeigem.org/gbdownload/%s" % file, filename=file, data=r"GET")
-        index += 1
 else:
-    print 'Invalid response! Download will not occur!'
+	print 'Downloading file for ' + found_BioBrick_IDs[int(Download_genbank)]
+	print '... ... ... Please wait ... ... ...\n\n'
+	# Fetching Web Pages:
+	# Fetching standard Web pages over HTTP is very easy with Python:
+	import urllib
+	BioBrick_ID = found_BioBrick_IDs[int(Download_genbank)]
+	file = BioBrick_ID + r".gb"
+	url_2_dl = "http://cambridgeigem.org/gbdownload/" + BioBrick_ID + ".gb"
+	print "Retrieving file using Cambridge iGEM 2010's portal: " + url_2_dl + "\n\n"
+	URL = urllib.urlopen(url_2_dl).readlines()
+	URLforprinting = "".join(URL)
+	print URLforprinting
 print
+
+
 
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######
-
-print 'TO USER: If you would like to perform a restriction analysis on the top hit sequences, then the following websites may be useful:'
-print
-print r"http://www.bioinformatics.org/sms/"
-print
-print r"http://www.bioinformatics.org/sms/gen_fasta.html"
-print r"http://www.bioinformatics.org/sms2/genbank_fasta.html"
-print
-print r"http://www.bioinformatics.org/sms/rest_sum.html"
-print r"http://www.bioinformatics.org/sms2/rest_summary.html"
-print r"http://tools.neb.com/NEBcutter2/"
-print
-
-raw_input('Press "Enter/Return" to close this window...')
-
+print "\nDone\n"
 ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### #######

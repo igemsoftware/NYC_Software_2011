@@ -10,3 +10,6 @@ Query sequence should be saved in fasta format to the Query_Sequence.fa file. Th
 
 
 For future development, query sequences could be cross referenced to the PICR database. This will inform you if the query is a well known CDS. 
+
+
+This script was developed by Balvir Kunar.

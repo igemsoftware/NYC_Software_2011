@@ -1,6 +1,9 @@
-README for the Registry_Russ directory
+README for the misc Registry scripts directory
 
-These are scripts that I have used to manipulate Parts Registry data for a variety of purposes. While undergrads are free (and encouraged) to cannibalize them and use bits of code, I have not uploaded any data or representations I have made using these scripts solely because I am an iGEM Adviser this year. If you are interested, email me at rud2004@med.cornell.edu
+These are scripts I have developed to help with a variety of projects. They are most short bits of code that I have used in larger programs elsewhere. They are posted here because if you're reading this then you will most likely find them useful. 
+
+You can email me at rud2004@med.cornell.edu
+
 
 These will likely be the most useful for you:
 
@@ -15,4 +18,4 @@ sequence-mapping.py	intermediate script to convert nucleotide to aa sequences, u
 updater.py	sorts through parts list to build list of only Available Parts
 
 
-Most of the scripts take arguments from the command line (i.e. python checkXMP.py <part ID>) - look at the code to see usage for each script
+Most of the scripts take arguments from the command line (i.e. python checkXMP.py <part ID>) - look at the code to see usage guidelines.

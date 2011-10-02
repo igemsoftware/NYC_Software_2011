@@ -14,7 +14,7 @@ def change_chars(sequence):
 def write_primer3_input(sequence):    
 		if sequence == 'null':
 			print "USING EXAMPLE SEQUENCE: "
-			sequence = "aggctvagctagcatcgatcagactagctacacttacgactacgactacgtactcagatcagtacgactacgactacgcatcgcatcatacgcatacgactacacactacgatcatctatcatcagtcgactacgtcgctagctagctacgac"
+			sequence = "aggctagctagcatcgatcagactagctacacttacgactacgactacgtactcagatcagtacgactacgactacgcatcgcatcatacgcatacgactacacactacgatcatctatcatcagtcgactacgtcgctagctagctacgac"
 			gene = 'recG'
 			print '\nGenerating primer3 input file from example sequence:  ' + sequence
 		elif len(sequence) > 30:
